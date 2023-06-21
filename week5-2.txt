@@ -1,0 +1,49 @@
+
+int tmpPin = A2;
+int celsius = 0;
+int relay_1 = 7;
+int relay_2 = 12;
+int relay_3 = 13;
+
+void setup()
+{
+  pinMode(tmpPin, INPUT);
+  Serial.begin(9600);
+
+  pinMode(relay_1, OUTPUT);
+  pinMode(relay_2, OUTPUT);
+  pinMode(relay_3, OUTPUT);
+  digitalWrite(relay_1,LOW);
+  digitalWrite(relay_2,LOW);
+  digitalWrite(relay_3,LOW);
+}
+
+
+unsigned long timer_1 = 0;
+
+void tempMode()
+{
+int  baselineTemp = 20;
+  int curent_temp = map(((analogRead(tmpPin) - 20) * 3.04), 0, 1023, -40, 125);
+  Serial.print("Curent Temp: ");
+  Serial.println(curent_temp);
+  
+  int curent_adc = analogRead(tmpPin);
+  Serial.print("Curent ADC: ");
+  Serial.println(curent_adc);
+  if ((unsigned long)(millis() - timer_1) > 3000)
+  {
+      if (curent_temp >= 45)
+      {
+        Serial.println("LED 1 ON");
+        digitalWrite(relay_1, HIGH);
+      }
+        
+      else
+      {
+        Serial.println("LED 1 ON");
+        digitalWrite(relay_1, LOW);           
+      }
+      timer_1 = millis();
+  }
+}
